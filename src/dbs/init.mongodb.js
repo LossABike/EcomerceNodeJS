@@ -1,8 +1,9 @@
 "use strict";
 
 const mongoose = require("mongoose");
-
-const connectString = `mongodb://localhost:27017/ShopAzure`;
+const { db: {host,port,name }} = require("../configs/config.mongodb")
+const connectString = `mongodb://${host}:${port}/${name}`;
+const { countConnect } = require("../helpers/check.connect");
 
 
 //use singleton parttern to set only one connect established
@@ -19,8 +20,10 @@ class Database{
         }
 
         mongoose
-          .connect(connectString)
-          .then((_) => console.log(`Connected Mongod Success`))
+            .connect(connectString, {
+              maxPoolSize: 50
+          })
+          .then((_) => console.log(`Connected Mongod Success `, countConnect()))
           .catch((err) => console.log(`Error Connect!`));
     }
 

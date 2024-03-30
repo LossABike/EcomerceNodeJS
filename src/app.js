@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const { default: helmet } = require('helmet')
@@ -17,13 +18,15 @@ app.use(compression())
 
 //init db
 require('./dbs/init.mongodb')
+const { checkOverload } = require('./helpers/check.connect')
+checkOverload()
 
 //init routes
 app.get('/', (req, res, next) => {
     const strCompress = 'Hi Hieu Ne'
     return res.status(200).json({
         message: "Welcom Azure",
-        metadata: strCompress.repeat(1000000)
+        //metadata: strCompress.repeat(1000000)
     })
 })
 
